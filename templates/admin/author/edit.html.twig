@@ -1,0 +1,11 @@
+{% extends "admin/form.base.html.twig" %}
+{% block title %}Editing{% endblock %}
+{% block formTitle %}Editing Author {{ author.firstName }} {{ author.lastName }}{% endblock %}
+{% block formContent %}
+    {{ include("admin/_form.html.twig") }}
+    <div class="btn-group">
+        <button class="btn btn-primary">Save</button> &nbsp;
+        <button type="button" class="btn btn-secondary" onclick="location.href='{{ path("admin_authors_index",{"id":author.id}) }}';">Cancel</button> &nbsp;
+    </div>
+    {{ form_end(form) }}
+{% endblock %}

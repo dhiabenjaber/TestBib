@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Welcome!{% endblock %}</title>
+    <link rel="icon" href=
+    "{{ asset("build/images/favicon/logo.png") }}"
+          type="image/x-icon">
+    {% block stylesheets %}
+        {{ encore_entry_link_tags('app') }}
+    {% endblock %}
+
+    {% block javascripts %}
+        {{ encore_entry_script_tags('app') }}
+    {% endblock %}
+</head>
+<body>
+<div id="page-container" class="container-fluid bg-soft">
+    <div class="row">
+        <div class="col-12">
+            X
+            <nav id="sidebarMenu" class="sidebar d-md-block bg-primary text-white collapse" data-simplebar>
+                <div class="sidebar-inner px-4 pt-3">
+                    <ul class="nav flex-column">
+                        <li class="nav-item ">
+                            <a href="{{ path("admin_home_index") }}" class="nav-link">
+                                <span class="sidebar-icon"><span class="fas fa-chart-pie"></span></span>
+                                <span>Home</span>
+                            </a>
+                        </li>
+                        <li class="nav-item ">
+                            <a href="{{ path("admin_books_index") }}" class="nav-link">
+                                <span class="sidebar-icon"><span class="fas fa-book"></span></span>
+                                <span>Book Collection</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ path("admin_borrowings_index") }}" class="nav-link">
+                                <span class="sidebar-icon"><span class="fas fa-chart-pie"></span></span>
+                                <span>Book Borrowings</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ path("admin_authors_index") }}" class="nav-link">
+                                <span class="sidebar-icon"><span class="fas fa-person-booth"></span></span>
+                                <span>Authors</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ path("admin_editors_index") }}" class="nav-link">
+                                <span class="sidebar-icon"><span class="fas fa-user-edit"></span></span>
+                                <span>Editors</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ path("admin_categories_index") }}" class="nav-link">
+                                <span class="sidebar-icon"><span class="fas fa-images"></span></span>
+                                <span>Categories</span>
+                            </a>
+                        </li>
+                        <li role="separator" class="dropdown-divider mt-4 mb-3 border-black"></li>
+                        <li class="nav-item">
+                            <a href="{{ path("admin_users_index") }}" class="nav-link">
+                                <span class="sidebar-icon"><span class="fas fa-user"></span></span>
+                                <span>Users</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+
+
+            <main class="content" style="margin-top: -2rem">
+
+                <nav class="navbar navbar-top navbar-expand navbar-dashboard navbar-dark pl-0 pr-2 pb-0">
+                    <div class="container-fluid px-0">
+                        <div class="d-flex justify-content-between w-100" id="navbarSupportedContent">
+                            <div class="d-flex">
+                            </div>
+                            <!-- Navbar links -->
+                            <ul class="navbar-nav align-items-center">
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                                       data-bs-toggle="dropdown" aria-expanded="false">
+                                        <div class="media d-flex align-items-center">
+                                            <i class="fa fa-user text-black"></i>
+                                            <div class="media-body ml-2 text-dark align-items-center d-none d-lg-block">
+                                                <span class="mb-0 font-small font-weight-bold">{% if is_granted("ROLE_ADMIN") %}
+    {{ app.user.email }}
+{% endif %}</span>
+                                            </div>
+                                        </div>
+                                    </a>
+                                    <div class="dropdown-menu dashboard-dropdown dropdown-menu-right mt-2">
+                                        <a class="dropdown-item font-weight-bold" href="{{ path("admin_users_edit",{"id":app.user.id}) }}"><span
+                                                    class="fas fa-cog"></span>Settings</a>
+                                        <div role="separator" class="dropdown-divider"></div>
+                                        <a class="dropdown-item font-weight-bold" href="{{ path("app_logout") }}"><span
+                                                    class="fas fa-sign-out-alt text-danger"></span>Log Out</a>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </nav>
+                <br/>
+                {% block body %}
+                {% endblock %}
+                <br>
+                <br>
+                <br>
+                <footer id="footer" class="footer section py-5">
+                    <div class="row">
+                        <div class="col-12 col-lg-6 mb-4 mb-lg-0">
+                            <p class="mb-0 text-center text-xl-left">Copyright © 2021-<span class="current-year"></span>
+                                <a class="text-primary font-weight-normal" href="https://themesberg.com"
+                                   target="_blank">Fehmi Denguir - Semeh Chriha GI3S3</a></p>
+                        </div>
+
+                    </div>
+                </footer>
+            </main>
+        </div>
+    </div>
+</div>
+</body>
+
+</html>

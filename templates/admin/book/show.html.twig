@@ -1,0 +1,15 @@
+{% extends "admin/form.base.html.twig" %}
+{% block title %}Showing{% endblock %}
+{% block formTitle %}Showing Book {{ book.title }}{% endblock %}
+{% block formContent %}
+    {{ include("admin/_form.html.twig") }}
+    <div class="btn-group">
+        <button type="button" class="btn btn-primary" onclick="location.href='{{ path("admin_books_index") }}';">Go Back</button> &nbsp;
+        <button type="button" class="btn btn-secondary" onclick="location.href='{{ path("admin_books_edit",{"id":book.id}) }}';">Edit</button> &nbsp;
+        <button type="button" class="btn btn-danger" onclick="dialogue({{ book.id }},'{{path('admin_books_delete',{"id":book.id})}}','{{ path("admin_books_index") }}')">Delete</button> &nbsp;
+    </div>
+    {{ form_end(form) }}
+    <br>
+    <br>
+    <br>
+{% endblock %}

@@ -1,0 +1,231 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}My Borrowings{% endblock %}
+
+{% block body %}
+    <div class="d-flex justify-content-center w-100" id="navbarSupportedContent">
+        <div class="d-flex">
+            <h3>My borrowing history</h3>
+        </div>
+    </div>
+    <br/>
+    <br/>
+    <div class="d-flex justify-content-center w-100" id="navbarSupportedContent">
+
+<ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+  <li class="nav-item">
+    <a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#pills-home" role="tab" aria-controls="pills-home" aria-selected="true">All my borrwings</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" id="pills-profile-tab" data-toggle="pill" href="#pills-profile" role="tab" aria-controls="pills-profile" aria-selected="false">Weekly requests</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" id="pills-contact-tab" data-toggle="pill" href="#pills-contact" role="tab" aria-controls="pills-contact" aria-selected="false">Weekly borrowings</a>
+  </li>
+</ul>
+    </div>
+
+<div class="tab-content" id="pills-tabContent">
+  <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+  
+    <div id="example_wrapper" class="dataTables_wrapper dt-bootstrap5" style="margin:20px;">
+        <table id="example" class="table table-striped" style="overflow:auto">
+            <thead>
+            <tr>
+                <th>Book</th>
+                <th>N° Copies Left</th>
+                <th>Borrowing Date</th>
+                <th>Expected Return Date</th>
+                <th>Actual Return Date</th>
+                <th>Status</th>
+                <th class="text-center">Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for borrowing in borrowings %}
+                <tr>
+                    <td>{{ borrowing.book }}</td>
+                    <td>{{ borrowing.book.nbrCopies }}</td>
+                    <th>{{ borrowing.borrowingDateTime|date('d/m/Y H:i') }}</th>
+                    <th>{{ borrowing.borrowingDateTime|date_modify("+7 day")|date('d/m/Y') }}</th>
+                    <th>{% if(borrowing.returnDateTime != null) %}{{ borrowing.returnDateTime|date('d/m/Y H:i') }} {% endif %}</th>
+                    {% if (borrowing.status == "Requested") %}
+                        <th style="color:orange">Requested
+                        </th>
+                    {% endif %}
+                    {% if (borrowing.status == "Borrowed - Not Yet Returned") %}
+                        <th style="color:blue">Borrowed - Not Yet Returned
+                        </th>
+                    {% endif %}
+                    {% if (borrowing.status == "Declined" or borrowing.status == "Never Returned") %}
+                        <th style="color:red">{{ borrowing.status }}</th>
+                    {% endif %} {% if(borrowing.status == "Returned") %}
+                        <th style="color:green">Returned</th>
+                    {% endif %}
+                    <td class="text-center">
+                        {% if (borrowing.status == "Requested") %} 
+                            <a class="dropdown-item text-danger" href="#"
+                                       onclick="dialogue({{ loop.index-1 }},'{{ path('user_borrowings_delete',{"id":borrowing.id}) }}')"><span
+                                                class="btn-label"><i class="fa fa-trash"></i></span> Delete</a>
+                        {% else %}
+                            <a class="dropdown-item text btn-labeled"
+                                       href="#"><span
+                                                class="btn-label"><i class="fa fa-eye"></i></span> No actions</a>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+            <tfoot>
+            <tr>
+                <th>Book</th>
+                <th>N° Copies Left</th>
+                <th>Borrowing Date</th>
+                <th>Expected Return Date</th>
+                <th>Actual Return Date</th>
+                <th>Status</th>
+                <th class="text-center">Actions</th>
+            </tr>
+            </tfoot>
+        </table>
+    </div>
+  
+  </div>
+  
+  
+  <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
+
+
+        <div id="example_wrapper" class="dataTables_wrapper dt-bootstrap5" style="margin:20px;">
+        <table id="example" class="table table-striped" style="overflow:auto">
+            <thead>
+            <tr>
+                <th>Book</th>
+                <th>N° Copies Left</th>
+                <th>Borrowing Date</th>
+                <th>Expected Return Date</th>
+                <th>Actual Return Date</th>
+                <th>Status</th>
+                <th class="text-center">Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for borrowing in weeklyRequests %}
+                <tr>
+                    <td>{{ borrowing.book }}</td>
+                    <td>{{ borrowing.book.nbrCopies }}</td>
+                    <th>{{ borrowing.borrowingDateTime|date('d/m/Y H:i') }}</th>
+                    <th>{{ borrowing.borrowingDateTime|date_modify("+7 day")|date('d/m/Y') }}</th>
+                    <th>{% if(borrowing.returnDateTime != null) %}{{ borrowing.returnDateTime|date('d/m/Y H:i') }} {% endif %}</th>
+                    {% if (borrowing.status == "Requested") %}
+                        <th style="color:orange">Requested
+                        </th>
+                    {% endif %}
+                    {% if (borrowing.status == "Borrowed - Not Yet Returned") %}
+                        <th style="color:blue">Borrowed - Not Yet Returned
+                        </th>
+                    {% endif %}
+                    {% if (borrowing.status == "Declined" or borrowing.status == "Never Returned") %}
+                        <th style="color:red">{{ borrowing.status }}</th>
+                    {% endif %} {% if(borrowing.status == "Returned") %}
+                        <th style="color:green">Returned</th>
+                    {% endif %}
+                    <td class="text-center">
+                        {% if (borrowing.status == "Requested") %} 
+                            <a class="dropdown-item text-danger" href="#"
+                                       onclick="dialogue({{ loop.index-1 }},'{{ path('user_borrowings_delete',{"id":borrowing.id}) }}')"><span
+                                                class="btn-label"><i class="fa fa-trash"></i></span> Delete</a>
+                        {% else %}
+                            <a class="dropdown-item text btn-labeled"
+                                       href="#"><span
+                                                class="btn-label"><i class="fa fa-eye"></i></span> No actions</a>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+            <tfoot>
+            <tr>
+                <th>Book</th>
+                <th>N° Copies Left</th>
+                <th>Borrowing Date</th>
+                <th>Expected Return Date</th>
+                <th>Actual Return Date</th>
+                <th>Status</th>
+                <th class="text-center">Actions</th>
+            </tr>
+            </tfoot>
+        </table>
+    </div>
+
+  </div>
+  <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab">
+  
+    <div id="example_wrapper" class="dataTables_wrapper dt-bootstrap5" style="margin:20px;">
+        <table id="example" class="table table-striped" style="overflow:auto">
+            <thead>
+            <tr>
+                <th>Book</th>
+                <th>N° Copies Left</th>
+                <th>Borrowing Date</th>
+                <th>Expected Return Date</th>
+                <th>Actual Return Date</th>
+                <th>Status</th>
+                <th class="text-center">Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for borrowing in weeklyBorrowings %}
+                <tr>
+                    <td>{{ borrowing.book }}</td>
+                    <td>{{ borrowing.book.nbrCopies }}</td>
+                    <th>{{ borrowing.borrowingDateTime|date('d/m/Y H:i') }}</th>
+                    <th>{{ borrowing.borrowingDateTime|date_modify("+7 day")|date('d/m/Y') }}</th>
+                    <th>{% if(borrowing.returnDateTime != null) %}{{ borrowing.returnDateTime|date('d/m/Y H:i') }} {% endif %}</th>
+                    {% if (borrowing.status == "Requested") %}
+                        <th style="color:orange">Requested
+                        </th>
+                    {% endif %}
+                    {% if (borrowing.status == "Borrowed - Not Yet Returned") %}
+                        <th style="color:blue">Borrowed - Not Yet Returned
+                        </th>
+                    {% endif %}
+                    {% if (borrowing.status == "Declined" or borrowing.status == "Never Returned") %}
+                        <th style="color:red">{{ borrowing.status }}</th>
+                    {% endif %} {% if(borrowing.status == "Returned") %}
+                        <th style="color:green">Returned</th>
+                    {% endif %}
+                    <td class="text-center">
+                        {% if (borrowing.status == "Requested") %} 
+                            <a class="dropdown-item text-danger" href="#"
+                                       onclick="dialogue({{ loop.index-1 }},'{{ path('user_borrowings_delete',{"id":borrowing.id}) }}')"><span
+                                                class="btn-label"><i class="fa fa-trash"></i></span> Delete</a>
+                        {% else %}
+                            <a class="dropdown-item text btn-labeled"
+                                       href="#"><span
+                                                class="btn-label"><i class="fa fa-eye"></i></span> No actions</a>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+            <tfoot>
+            <tr>
+                <th>Book</th>
+                <th>N° Copies Left</th>
+                <th>Borrowing Date</th>
+                <th>Expected Return Date</th>
+                <th>Actual Return Date</th>
+                <th>Status</th>
+                <th class="text-center">Actions</th>
+            </tr>
+            </tfoot>
+        </table>
+    </div>
+  
+  </div>
+</div>
+
+    
+
+{% endblock %}

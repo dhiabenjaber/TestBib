@@ -1,0 +1,14 @@
+{% extends "admin/form.base.html.twig" %}
+{% block title %}New user{% endblock %}
+{% block formTitle %}New user{% endblock %}
+{% block formContent %}
+    {{ include("admin/_form.html.twig") }}
+    <div class="btn-group">
+        <button class="btn btn-primary">Add</button> &nbsp;
+        <button type="button" class="btn btn-secondary" onclick="location.href='{{ path("admin_users_index") }}';">Cancel</button> &nbsp;
+    </div>
+    {{ form_end(form) }}
+    <br>
+    <br>
+    <br>
+{% endblock %}

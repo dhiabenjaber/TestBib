@@ -1,0 +1,495 @@
+{% extends 'base.html.twig' %}
+
+
+
+ {% block stylesheets %}
+    {{ encore_entry_link_tags('app') }}
+    <style>
+
+#sidebar {
+    width: 20%;
+    padding: 10px;
+    margin: 0;
+    float: left
+}
+
+#products {
+    width: 80%;
+    padding: 10px;
+    margin: 0;
+    float: right
+}
+
+ul {
+    list-style: none;
+    padding: 5px
+}
+
+li a {
+    color: darkgray;
+    text-decoration: none
+}
+
+li a:hover {
+    text-decoration: none;
+    color: darksalmon
+}
+
+.fa-circle {
+    font-size: 20px
+}
+
+#red {
+    color: #e94545d7
+}
+
+#teal {
+    color: rgb(69, 129, 129)
+}
+
+#blue {
+    color: #0000ff
+}
+
+.card {
+    width: 250px;
+    display: inline-block;
+    height: 300px
+}
+
+.card-img-top {
+    width: 250px;
+    height: 210px
+}
+
+.card-body p {
+    margin: 2px
+}
+
+.card-body {
+    padding: 0;
+    padding-left: 2px
+}
+
+.filter {
+    display: none;
+    padding: 0;
+    margin: 0
+}
+
+@media(min-width:991px) {
+    
+
+    .card {
+        width: 190px;
+        display: inline-block;
+        height: 300px
+    }
+
+    .card-img-top {
+        width: 188px;
+        height: 210px
+    }
+
+    #mobile-filter {
+        display: none
+    }
+}
+
+@media(min-width:768px) and (max-width:991px) {
+  
+
+    .card {
+        width: 230px;
+        display: inline-block;
+        height: 300px;
+        margin-bottom: 10px
+    }
+
+    .card-img-top {
+        width: 230px;
+        height: 210px
+    }
+
+    #mobile-filter {
+        display: none
+    }
+}
+
+@media(min-width:568px) and (max-width:767px) {
+  
+
+    .card {
+        width: 205px;
+        display: inline-block;
+        height: 300px;
+        margin-bottom: 10px
+    }
+
+    .card-img-top {
+        width: 203px;
+        height: 210px
+    }
+
+    .fa-circle {
+        font-size: 15px
+    }
+
+    #mobile-filter {
+        display: none
+    }
+}
+
+@media(max-width:567px) {
+    
+    #sidebar {
+        width: 100%;
+        padding: 10px;
+        margin: 0;
+        float: left
+    }
+
+    #products {
+        width: 100%;
+        padding: 5px;
+        margin: 0;
+        float: right
+    }
+
+    .card {
+        width: 230px;
+        display: inline-block;
+        height: 300px;
+        margin-bottom: 10px;
+        margin-top: 10px
+    }
+
+    .card-img-top {
+        width: 230px;
+        height: 210px
+    }
+
+    .list-group-item {
+        padding: 3px
+    }
+
+    .offset-1 {
+        margin-left: 8%
+    }
+
+    .filter {
+        display: block;
+        margin-left: 70%;
+        margin-top: 2%
+    }
+
+    #sidebar {
+        display: none
+    }
+
+    #mobile-filter {
+        padding: 10px
+    }
+}
+
+
+
+.item-price {
+	font-size: 13px;
+	padding: 2px 0;
+}
+
+.thumb-content .btn i {
+	font-size: 14px;
+	font-weight: bold;
+	margin-left: 5px;
+}
+
+.thumb-content .btn {
+	color: #7ac400;
+	font-size: 11px;
+	text-transform: uppercase;
+	font-weight: bold;
+	background: none;
+	border: 1px solid #7ac400;
+	padding: 6px 14px;
+	margin-top: 5px;
+	line-height: 16px;
+	border-radius: 20px;
+}
+
+
+.item {
+	color: #747d89;
+	min-height: 325px;
+	text-align: center;
+	overflow: hidden;
+}
+ .thumb-wrapper {
+	padding: 25px 15px;
+	background: #fff;
+	border-radius: 6px;
+	text-align: center;
+	position: relative;
+	box-shadow: 0 2px 3px rgba(0,0,0,0.2);
+}
+.item .img-box {
+	height: 120px;
+	margin-bottom: 20px;
+	width: 100%;
+	position: relative;
+}
+.item img {	
+	max-width: 100%;
+	max-height: 100%;
+	display: inline-block;
+	position: absolute;
+	bottom: 0;
+	margin: 0 auto;
+	left: 0;
+	right: 0;
+}
+.item h4 {
+	font-size: 18px;
+}
+.item h4, .carousel .item p, .carousel .item ul {
+	margin-bottom: 5px;
+}
+    
+    </style>
+            
+{% endblock %}
+{% block title %}Search {% endblock %}
+
+{% block body %}
+<br>
+<br>
+<div class="container">
+<div class="col">
+    <input class="form-control form-control-lg form-control-borderless" type="search" placeholder="Search topics or keywords" value="{{keyword}}" id="keywordInput" onchange="changedKeyword()">
+</div>
+</div>
+<br>
+<br>
+<div class="filter"> <button class="btn btn-default" type="button" data-toggle="collapse" data-target="#mobile-filter" aria-expanded="false" aria-controls="mobile-filter">Filters<span class="fa fa-filter pl-1"></span></button>
+</div>
+<div id="mobile-filter">
+    <div>
+        <h6 class="p-1 border-bottom">Price</h6>
+        <input type="range" name="rangeInput" min="0" max="100" onchange="updateTextInput(this.value);">
+        <input type="text" id="priceInput" value="">
+    </div>
+    <div>
+        <h6 class="p-1 border-bottom">Categories</h6>
+        <ul>
+            <li><a href="#">Action</a></li>
+            <li><a href="#">Adventure</a></li>
+            <li><a href="#">Office</a></li>
+            <li><a href="#">Bedroom</a></li>
+            <li><a href="#">Kitchen</a></li>
+        </ul>
+    </div>
+    <div>
+        <h6 class="p-1 border-bottom">Authors</h6>
+         <ul>
+            <li><a href="#">JK</a></li>
+            <li><a href="#">JK</a></li>
+            <li><a href="#">JK</a></li>
+            <li><a href="#">JK</a></li>
+            <li><a href="#">JK</a></li>
+        </ul>
+        
+    </div>
+    <div>
+        <h6 class="p-1 border-bottom">Publishers</h6>
+         <ul>
+            <li><a href="#">JK</a></li>
+            <li><a href="#">JK</a></li>
+            <li><a href="#">JK</a></li>
+            <li><a href="#">JK</a></li>
+            <li><a href="#">JK</a></li>
+        </ul>
+        
+    </div>
+</div>
+
+
+
+<section id="sidebar">
+<div class="form-group">
+        <label for="priceRange">Set max price : <label id="rangePrimary"> 100 </label> tnd</label>
+        <input type="range" name="priceRange" step="1" min="0" max="100" value="100" onchange="changedPrice(value);">
+    </div>
+    <div>
+        <h6 class="p-1 border-bottom">Categories</h6>
+            {% for cat in categories %}
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" name="categorie" id="categorie" value="{{cat.id}}" onchange="changedCategory();">
+                <label class="form-check-label" for="categorie">{{cat.label}}</label>
+            </div>
+            {% endfor %}
+    </div>
+    <div>
+        <h6 class="p-1 border-bottom">Authors</h6>
+        {% for author in authors %}
+         <div class="form-check form-check-inline">
+            <input class="form-check-input" name="authorsCheckbox" type="checkbox" id="authorsCheckbox" value="{{author.id}}" onchange="changedAuthor();">
+            <label class="form-check-label" for="authorsCheckbox">{{author.firstName}} {{author.lastName}}</label>
+        </div>
+        {% endfor %}
+        
+    </div>
+    <div>
+        <h6 class="p-1 border-bottom">Editors</h6>
+        {% for editor in editors %}
+         <div class="form-check form-check-inline">
+            <input class="form-check-input" name="editorsCheckbox" type="checkbox" id="editorsCheckbox" value="{{editor.id}}" onchange="changedEditor();">
+            <label class="form-check-label" for="editorsCheckbox">{{editor.name}}</label>
+        </div>
+        {% endfor %}
+    </div>
+
+</section>
+
+
+<section id="books">
+    <div class="container">
+        <div class="row" id="animationsHolder">
+
+        </div>
+        <div class="row" id="booksContainer">
+            {% for book in result  %}
+            
+            
+            <div class="col-lg-3 col-sm-4 col-11">
+                <div class="img-box">
+                    <img src="../upload/images/{{book.images[0].image}}" class="img-fluid" alt="">									
+                </div>
+                <div class="thumb-content">
+                    <h4>{{book.title}}</h4>									
+                    <h6>{{book.nbrPages}} pages</h6>									
+                    <h6>category : {{book.category['label']}}</h6>									
+                    
+                    <p class="item-price"><b>{{book.price}} tnd</b></p>
+                    <a href="{{ path('user_book_index',{'id':book.id}) }}" class="btn btn-primary">Book it</a>
+                </div>						
+            </div>
+            
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+
+
+<br>
+<br>
+
+
+<script>
+    var categories = document.getElementsByName("categorie");
+    var authors = document.getElementsByName("authorsCheckbox");
+    var editors = document.getElementsByName("editorsCheckbox");
+
+    var container = document.getElementById("booksContainer");
+    var keyword = document.getElementById("keywordInput");
+    var priceHolder = document.getElementById("rangePrimary");
+
+    var selectedCategories = "";
+    var selectedAuthors = "";
+    var selectedEditors = "";
+    var selectedKeyword="";
+    var selectedPrice="";
+
+    function changedKeyword(){
+        selectedKeyword= keyword.value;
+        fetchData();
+    }
+
+    function changedAuthor(){
+        selectedAuthors="";
+        for (var i=0; i<authors.length; i++) {
+            if (authors[i].checked) {
+                selectedAuthors=selectedAuthors+authors[i].value+",";
+            }
+        } 
+
+        fetchData();
+    }
+
+    function changedCategory(){
+        selectedCategories="";
+        for (var i=0; i<categories.length; i++) {
+            if (categories[i].checked) {
+                selectedCategories=selectedCategories+categories[i].value+",";
+            }
+        } 
+        fetchData();
+    }
+
+    function changedEditor(){
+        selectedEditors = "";
+        for (var i=0; i<editors.length; i++) {
+            if (editors[i].checked) {
+                selectedEditors=selectedEditors+editors[i].value+",";
+            }
+        }
+        fetchData();
+    }
+
+    function changedPrice(val){
+        priceHolder.innerHTML = val;
+        selectedPrice=val;
+        fetchData();
+    }
+
+    let apiLink = "http://127.0.0.1:8000/search/find"
+    function fetchData(){
+        let link = "?keyword="+selectedKeyword+"&categories="+selectedCategories+"&authors="+selectedAuthors+"&editors="+selectedEditors+"&priceMax="+selectedPrice;
+        $("#booksContainer").hide(100);
+        $("#animationsHolder").show(1000);
+        $("#animationsHolder").html('<div class="d-flex justify-content-start"><lottie-player src="https://assets6.lottiefiles.com/packages/lf20_qMFybx.json" mode="bounce" background="transparent"  speed="1"  style="width: 100%; height:300px"  loop  autoplay></lottie-player></div>');
+
+        $.ajax({ 
+        type: 'GET', 
+        url: apiLink+link, 
+        dataType: 'json',
+        success: function (data) { 
+            container.innerHTML="";
+            if(data.length == 0){
+
+                $("#animationsHolder").html(' <div class="d-flex justify-content-start"><lottie-player src="https://assets2.lottiefiles.com/packages/lf20_GlZGOi.json" mode="bounce" background="transparent"  speed="1"  style="width: 100%; height:300px"  loop  autoplay></lottie-player></div>');
+            }else{
+                for (var i = 0; i < data.length; i++){
+                container.innerHTML+=`
+                <div class="col-lg-3 col-sm-4 col-11">
+                    <div class="img-box"><img src="../upload/images/${data[i]['images'][0]['image']}" class="img-fluid" alt="">
+                </div>
+                <div class="thumb-content">
+                    <h4>${data[i]['title']}</h4>	
+                    <h6>${data[i]['nbrPages']} pages</h6>
+                    <h6>category : ${data[i]['category']['lable']}</h6>
+                    <p class="item-price"><b>${data[i]['price']} tnd</b></p>
+                    <a href="/book/${data[i]['id']}" class="btn btn-primary">Book it</a>
+                    </div>
+                </div>
+                `
+                $("#booksContainer").show(500);
+
+                $("#animationsHolder").hide(1000);
+            }
+
+            }
+
+            
+            history.pushState(null, "", link); 
+
+        }
+    });
+    }
+
+
+</script>
+
+
+{% endblock %}

@@ -1,0 +1,26 @@
+{% extends "admin/form.base.html.twig" %}
+{% block title %}Showing{% endblock %}
+
+{% block formTitle %}<div class="d-flex justify-content-between"> Showing Borrowing #{{ borrowing.id }}
+        {% if(borrowing.status =="Requested") %}
+    <div class="btn-group">
+        <button type="button" class="btn btn-primary" onclick="dialogueBorrowing({{ borrowing.id }},'{{path('admin_borrowings_accept',{"id":borrowing.id})}}','{{ path("admin_borrowings_index") }}')">Accept</button> &nbsp;
+        <button type="button" class="btn btn-danger" onclick="dialogueBorrowing({{ borrowing.id }},'{{path('admin_borrowings_decline',{"id":borrowing.id})}}','{{ path("admin_borrowings_index") }}')">Decline</button> &nbsp;
+    </div>
+    {% endif %}
+    </div>{% endblock %}
+
+{% block formContent %}
+    {{ include("admin/_form.html.twig") }}
+    <div class="btn-group">
+        <button type="button" class="btn btn-primary" onclick="location.href='{{ path("admin_borrowings_index") }}';">Go Back</button> &nbsp;
+        {% if(borrowing.status !="Requested") %}
+            <button type="button" class="btn btn-secondary" onclick="location.href='{{ path("admin_borrowings_edit",{"id":borrowing.id}) }}';">Edit</button> &nbsp;
+        {% endif %}
+        <button type="button" class="btn btn-danger" onclick="dialogueBorrowing({{ borrowing.id }},'{{path('admin_borrowings_delete',{"id":borrowing.id})}}','{{ path("admin_borrowings_index") }}')">Delete</button> &nbsp;
+    </div>
+    {{ form_end(form) }}
+    <br>
+    <br>
+    <br>
+{% endblock %}

@@ -1,0 +1,101 @@
+{% extends "admin/base.html.twig" %}
+{% block body %}
+    <div class="d-flex justify-content-between w-100" id="navbarSupportedContent">
+        <div class="d-flex">
+            <h3>Borrowings</h3>
+        </div>
+    </div>
+    <br/>
+    <br/>
+    <div id="example_wrapper" class="dataTables_wrapper dt-bootstrap5">
+        <table id="example" class="table table-striped" style="width:100%">
+            <thead>
+            <tr>
+                <th>Book</th>
+                <th>N° Copies Left</th>
+                <th>User</th>
+                <th>Borrowing Date</th>
+                <th>Expected Return Date</th>
+                <th>Actual Return Date</th>
+                <th>Status</th>
+                <th class="text-center">Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for borrowing in borrowings %}
+                <tr>
+                    <td>{{ borrowing.book }}</td>
+                    <td>{{ borrowing.book.nbrCopies }}</td>
+                    <th>{{ borrowing.user }}</th>
+                    <th>{{ borrowing.borrowingDateTime|date('d/m/Y H:i') }}</th>
+                    <th>{{ borrowing.borrowingDateTime|date_modify("+7 day")|date('d/m/Y') }}</th>
+                    <th>{% if(borrowing.returnDateTime != null) %}{{ borrowing.returnDateTime|date('d/m/Y H:i') }} {% endif %}</th>
+                    {% if(borrowing.status == "Requested") %}
+                        <th style="color:orange">Requested
+                        </th>
+                    {% endif %}
+                    {% if(borrowing.status == "Borrowed - Not Yet Returned") %}
+                        <th style="color:blue">Borrowed - Not Yet Returned
+                        </th>
+                    {% endif %}
+                    {% if(borrowing.status == "Declined" or borrowing.status == "Never Returned") %}
+                        <th style="color:red">{{ borrowing.status }}</th>
+                    {% endif %} {% if(borrowing.status == "Returned") %}
+                        <th style="color:green">Returned</th>
+                    {% endif %}
+                    <td class="text-center">
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-sm dropdown-toggle" data-bs-toggle="dropdown"
+                                    aria-expanded="false">
+                    <span class="icon icon-sm">
+                                                        <span class="fas fa-ellipsis-h icon-dark"></span>
+                                                    </span>
+                                <span class="sr-only">Toggle Dropdown</span>
+                            </button>
+
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item text-black btn-labeled"
+                                       href="{{ path("admin_borrowings_show",{"id":borrowing.id}) }}"><span
+                                                class="btn-label"><i class="fa fa-eye"></i></span> Show</a></li>
+                                <li><a class="dropdown-item text-black"
+                                       href="{{ path("admin_borrowings_edit",{"id":borrowing.id}) }}"><span
+                                                class="btn-label"><i class="fa fa-edit"></i></span> Edit</a></li>
+                                {% if(borrowing.status == "Requested") %}
+                                <li>
+                                    <hr class="dropdown-divider">
+                                <li><a class="dropdown-item text-soft-green btn-labeled"
+                                       onclick="dialogueBorrowing({{ loop.index-1 }},'{{ path('admin_borrowings_accept',{"id":borrowing.id}) }}')"
+                                       href="#"><span
+                                                class="btn-label"><i class="fa fa-check"></i></span> Accept</a></li>
+                                <li><a class="dropdown-item text-danger"
+                                       onclick="dialogueBorrowing({{ loop.index-1 }},'{{ path('admin_borrowings_decline',{"id":borrowing.id}) }}')"
+                                       href="#"><span
+                                                class="btn-label"><i class="fa fa-times"></i></span> Decline</a></li>
+                                {% endif %}
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+                                <li><a class="dropdown-item text-danger" href="#"
+                                       onclick="dialogue({{ loop.index-1 }},'{{ path('admin_borrowings_delete',{"id":borrowing.id}) }}')"><span
+                                                class="btn-label"><i class="fa fa-trash"></i></span> Delete</a></li>
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+            <tfoot>
+            <tr>
+                <th>Book</th>
+                <th>N° Copies Left</th>
+                <th>User</th>
+                <th>Borrowing Date</th>
+                <th>Expected Return Date</th>
+                <th>Actual Return Date</th>
+                <th>Status</th>
+                <th class="text-center">Actions</th>
+            </tr>
+            </tfoot>
+        </table>
+    </div>
+{% endblock %}

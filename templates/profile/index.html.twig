@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+{% block title %}{{app.user.firstName}} {{app.user.lastName}}{% endblock %}
+{% form_theme form 'bootstrap_5_layout.html.twig' %}
+{% block body %}
+<div class="container">
+<h2 class="text-center">Profile settings</h2>
+<div class="card border-light shadow-sm components-section">
+    <div class="card-body">
+    <div class="my-custom-class-for-errors">
+        {{ form_errors(form) }}
+    </div>
+        {{ form_start(form) }}
+        {{ form_widget(form) }}
+        <div class="btn-group">
+        <button class="btn btn-primary">Update</button> &nbsp;
+        <button type="button" class="btn btn-secondary" onclick="location.href='{{ path("admin_users_index") }}';">Cancel</button> &nbsp;
+    </div>
+    {{ form_end(form) }}
+    <br>
+    <br>
+    <br>
+    </div>
+</div>
+
+</div>
+{% endblock %}

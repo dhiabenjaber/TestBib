@@ -1,0 +1,70 @@
+{% extends "admin/base.html.twig" %}
+{% block body %}
+    <div class="d-flex justify-content-between w-100" id="navbarSupportedContent">
+        <div class="d-flex">
+            <h3>Books</h3>
+        </div>
+        <button class="btn btn-sm btn-secondary" type="button" onclick="location.href='{{ path("admin_books_new") }}';">Add <span class="fas fa-plus sm-2"></span></button>
+    </div>
+    <br/>
+    <br/>
+    <div id="example_wrapper" class="dataTables_wrapper dt-bootstrap5">
+    <table id="example" class="table table-striped" style="width:100%">
+        <thead>
+        <tr>
+            <th>Title</th>
+            <th>ISBN</th>
+            <th>Editor</th>
+            <th>Category</th>
+            <th>Edition Date</th>
+            <th>Number of Pages</th>
+            <th>Number of Copies</th>
+            <th>Price(TND)</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for book in books %}
+        <tr>
+            <td>{{ book.title }}</td>
+            <th>{{ book.isbn }}</th>
+            <th>{{ book.editor }}</th>
+            <th>{{ book.category }}</th>
+            <th>{{ book.editionDate|date("d/m/Y") }}</th>
+            <th>{{ book.nbrPages }}</th>
+            <th>{{ book.nbrCopies }}</th>
+            <th>{{ book.price }}</th>
+            <td><div class="btn-group">
+                <button type="button" class="btn btn-sm dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                    <span class="icon icon-sm">
+                                                        <span class="fas fa-ellipsis-h icon-dark"></span>
+                                                    </span>
+                    <span class="sr-only">Toggle Dropdown</span>
+                </button>
+
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item text-black btn-labeled" href="{{ path("admin_books_show",{"id":book.id}) }}"><span class="btn-label"><i class="fa fa-eye"></i></span> Show</a></li>
+                        <li><a class="dropdown-item text-black" href="{{ path("admin_books_edit",{"id":book.id}) }}"><span class="btn-label"><i class="fa fa-edit"></i></span> Edit</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item text-danger" href="#" onclick="dialogue({{ loop.index-1 }},'{{path('admin_books_delete',{"id":book.id})}}')"><span class="btn-label"><i class="fa fa-trash"></i></span> Delete</a></li>
+                    </ul>
+            </div>
+            </td>
+        </tr>
+        {% endfor %}
+        </tbody>
+        <tfoot>
+        <tr>
+            <th>Title</th>
+            <th>ISBN</th>
+            <th>Editor</th>
+            <th>Category</th>
+            <th>Edition Date</th>
+            <th>Number of Pages</th>
+            <th>Number of Copies</th>
+            <th>Price(TND)</th>
+        </tr>
+        </tfoot>
+    </table>
+    </div>
+{% endblock %}

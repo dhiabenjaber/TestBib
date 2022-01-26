@@ -1,0 +1,12 @@
+{% extends "admin/form.base.html.twig" %}
+{% block title %}Showing{% endblock %}
+{% block formTitle %}Showing Author {{ author.firstName }} {{ author.lastName }}{% endblock %}
+{% block formContent %}
+    {{ include("admin/_form.html.twig") }}
+    <div class="btn-group">
+        <button class="btn btn-primary">Go Back</button> &nbsp;
+        <button type="button" class="btn btn-secondary" onclick="location.href='{{ path("admin_authors_edit",{"id":author.id}) }}';">Edit</button> &nbsp;
+        <button type="button" class="btn btn-danger" onclick="dialogue({{ author.id }},'admin_authors_delete')">Delete</button> &nbsp;
+    </div>
+    {{ form_end(form) }}
+{% endblock %}

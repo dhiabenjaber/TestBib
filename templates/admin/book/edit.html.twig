@@ -1,0 +1,96 @@
+{% extends "admin/form.base.html.twig" %}
+{% block title %}Editing{% endblock %}
+{% block formTitle %}Editing Book {{ book.title }}{% endblock %}
+{% block formContent %}
+    {{ form_start(form) }}
+    {% for child in form %}
+        {% if child.vars.name != "images" and child.vars.name != "category" %}
+            {{ form_row(child) }}
+        {% endif %}
+    {% endfor %}
+    <br>
+    {% do form.category.setRendered %}
+    <div class="form-group">
+        <label for="{{form.children.category.vars.id}}" class="required">Category</label>
+        <select name="{{ form.children.category.vars.full_name }}" id="{{form.children.category.vars.id}}" class="form-control js-example-placeholder-single">
+            <option></option>
+            {% for option in form.children.category.vars.choices %}
+                <option value="{{option.value}}" {%  if option.value == form.category.vars.value %} {{'selected="selected"'}}{% endif %}>{{option.label}}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <br>
+    <div class="d-flex justify-content-between" id="imgs">
+        {{ form_label(form.images) }}
+    </div>
+    <ul class="images" data-index="{{ form.images|length > 0 ? form.images|last.vars.name + 1 : 0 }}"
+        data-prototype="{{ form_widget(form.images.vars.prototype)|e('html_attr') }}">
+        {{ form_widget(form.images) }}
+    </ul>
+    <div class="btn-group">
+        <button class="btn btn-primary">Save</button> &nbsp;
+        <button type="button" class="btn btn-secondary" onclick="location.href='{{ path("admin_books_index") }}';">
+            Cancel
+        </button> &nbsp;
+    </div>
+    {{ form_end(form) }}
+    <br>
+    <br>
+    <br>
+
+    <script>
+
+        const addTagLink = document.createElement('button')
+        addTagLink.classList.add('add_tag_list')
+        addTagLink.classList.add('btn')
+        addTagLink.classList.add('btn-secondary')
+        addTagLink.classList.add('btn-sm')
+        addTagLink.innerText = 'Add an image'
+        addTagLink.type = 'button'
+        addTagLink.dataset.collectionHolderClass = 'images'
+        const addTagFormDeleteLink = (tagFormLi) => {
+            const removeFormButton = document.createElement('button')
+            removeFormButton.classList.add('btn')
+            removeFormButton.classList.add('btn-secondary')
+            removeFormButton.classList.add('btn-sm')
+            removeFormButton.innerText = 'Delete this image'
+
+            tagFormLi.append(removeFormButton);
+
+            removeFormButton.addEventListener('click', (e) => {
+                e.preventDefault()
+                // remove the li for the tag form
+                tagFormLi.remove();
+            });
+        }
+        const images = document.getElementById('book_images')
+        for (let i = 1; i < images.children.length; i++) {
+            addTagFormDeleteLink(images.children[i])
+        }
+        const newLinkLi = document.createElement('button').append(addTagLink)
+
+        const collectionHolder = document.querySelector('#imgs')
+        collectionHolder.appendChild(addTagLink)
+
+        const addFormToCollection = (e) => {
+            const collectionHolder = document.querySelector('.' + e.currentTarget.dataset.collectionHolderClass);
+
+            const item = document.createElement('li');
+
+            item.innerHTML = collectionHolder
+                .dataset
+                .prototype
+                .replace(
+                    /__name__/g,
+                    collectionHolder.dataset.index
+                );
+            collectionHolder.appendChild(item);
+            collectionHolder.dataset.index++;
+            addTagFormDeleteLink(item);
+        }
+
+        addTagLink.addEventListener("click", addFormToCollection);
+
+
+    </script>
+{% endblock %}

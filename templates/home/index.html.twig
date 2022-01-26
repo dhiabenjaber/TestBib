@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Bibliothèque Universitaire!{% endblock %}
+
+
+
+{% block body %}
+    
+
+    <div class="container">
+        <div class="row">
+        {% for book in books %}
+
+
+
+        <div class="card col-lg-3 mb-4" style="width: 18rem; margin:10px">
+        <a href="{{ path('user_book_index',{'id':book.id}) }}" ><img class="card-img-top" style="object-fit: contain; height: 300px" src="upload/images/{{ book.images[0].image }}" alt="Card image cap"></a>
+        <div class="card-body">
+            <h5 class="card-title">{{ book.title }}</h5>
+        </div>
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item">Category : {{ book.category }}</li>
+            <li class="list-group-item">Number of copies left : {{ book.nbrCopies }}</li>
+            <li class="list-group-item">Authers : {% for auth in book.authors %} {{ auth.firstName }} {{ auth.lastName }}{% endfor %}</li>
+        </ul>
+        <div class="card-body">
+            <a href="{{ path('user_book_index',{'id':book.id}) }}" class="card-link">More details</a>
+        </div>
+        </div>
+
+
+        
+
+        
+
+        
+
+
+
+        {% endfor %}
+        </div>
+
+    </div>
+
+    
+
+
+
+{% endblock %}

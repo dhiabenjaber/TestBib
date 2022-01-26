@@ -1,0 +1,149 @@
+{% extends "admin/base.html.twig" %}
+{% block body %}
+    <div class="row justify-content-md-center">
+        <div class="card border-light shadow-sm">
+            <div class="card-header">
+                <div class="row align-items-center">
+                    <div class="col">
+                        <h2 class="h5">Book Borrowings Calendar </h2>
+                    </div>
+                    <div class="col text-right">
+                        <a href="{{ path("admin_borrowings_index") }}" class="btn btn-sm btn-secondary">See all</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 mb-4" id="calendar">
+        </div>
+        <div class="col-12 col-sm-6 col-xl-4 mb-4">
+            <div class="card border-light shadow-sm">
+                <div class="card-body">
+                    <div class="row d-block d-xl-flex align-items-center">
+                        <div
+                                class="
+                          col-12 col-xl-5
+                          text-xl-center
+                          mb-3 mb-xl-0
+                          d-flex
+                          align-items-center
+                          justify-content-xl-center
+                        "
+                        >
+                            <div
+                                    class="
+                            icon icon-shape icon-md icon-shape-blue
+                            rounded
+                            mr-4 mr-sm-0
+                          "
+                            >
+                                <span class="fas fa-user"></span>
+                            </div>
+                        </div>
+                        <div class="col-12 col-xl-7 px-xl-0">
+                            <div class="d-none d-sm-block">
+                                <h2 class="h5">Users</h2>
+                                <h3 class="mb-1">{{numberOfUsers}}</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-sm-6 col-xl-4 mb-4">
+            <div class="card border-light shadow-sm">
+                <div class="card-body">
+                    <div class="row d-block d-xl-flex align-items-center">
+                        <div
+                                class="
+                          col-12 col-xl-5
+                          text-xl-center
+                          mb-3 mb-xl-0
+                          d-flex
+                          align-items-center
+                          justify-content-xl-center
+                        "
+                        >
+                            <div
+                                    class="
+                            icon icon-shape icon-md icon-shape-secondary
+                            rounded
+                            mr-4
+                          "
+                            >
+                                <span class="fas fa-book"></span>
+                            </div>
+                        </div>
+                        <div class="col-12 col-xl-7 px-xl-0">
+                            <div class="d-none d-sm-block">
+                                <h2 class="h5">Requested Books</h2>
+                                <h3 class="mb-1">{{ numberOfRequestedBooks }}</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-sm-6 col-xl-4 mb-4">
+            <div class="card border-light shadow-sm">
+                <div class="card-body">
+                    <div class="row d-block d-xl-flex align-items-center">
+                        <div
+                                class="
+                          col-12 col-xl-5
+                          text-xl-center
+                          mb-3 mb-xl-0
+                          d-flex
+                          align-items-center
+                          justify-content-xl-center
+                        "
+                        >
+                            <div
+                                    class="
+                            icon icon-shape icon-md icon-shape-secondary
+                            rounded
+                            mr-4
+                          "
+                            >
+                                <span class="fas fa-times"></span>
+                            </div>
+                        </div>
+                        <div class="col-12 col-xl-7 px-xl-0">
+                            <div class="d-none d-sm-block">
+                                <h2 class="h5">Unreturned Books</h2>
+                                <h3 class="mb-1">{{ numberOfUnreturnedBooks }}</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        var calendar = createCalendar();
+        console.log(calendar);
+        {% for requestedBorrowing in requestedBorrowings %}
+        var event = {
+            title:"{{ requestedBorrowing.book }}",
+            start:"{{ requestedBorrowing.borrowingDateTime|date("Y-m-d") }}",
+            color:'orange',
+            url:"{{ path("admin_borrowings_show",{"id":requestedBorrowing.id}) }}"
+        }
+        console.log(event);
+        calendar.addEvent(
+            event
+        );
+        {% endfor %}
+        {% for borrowing in toBeReturnedBorrowings %}
+        var event = {
+            title:"{{ borrowing.book }}",
+            start:"{{ borrowing.borrowingDateTime|date_modify("+7 day")|date('Y-m-d') }}",
+            color:'blue',
+            url:"{{ path("admin_borrowings_show",{"id":borrowing.id}) }}"
+        }
+        console.log(event);
+        calendar.addEvent(
+            event
+        );
+        {% endfor %}
+    </script>
+{% endblock %}

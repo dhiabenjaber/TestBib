@@ -1,0 +1,56 @@
+{% extends "admin/base.html.twig" %}
+{% block body %}
+    <div class="d-flex justify-content-between w-100" id="navbarSupportedContent">
+    <div class="d-flex">
+        <h3>Authors</h3>
+    </div>
+    <button class="btn btn-sm btn-secondary" type="button" onclick="location.href='{{ path("admin_authors_new") }}';">Add <span class="fas fa-plus sm-2"></span></button>
+    </div>
+    <br/>
+    <br/>
+    <div id="example_wrapper" class="dataTables_wrapper dt-bootstrap5">
+        <table id="example" class="table table-striped" style="width:100%">
+            <thead>
+            <tr>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Biography</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for author in authors %}
+            <tr>
+                <td>{{ author.firstName }}</td>
+                <td>{{ author.lastName }}</td>
+                <td>{{ author.biography }}</td>
+                <td><div class="btn-group">
+                        <button type="button" class="btn btn-sm dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                    <span class="icon icon-sm">
+                                                        <span class="fas fa-ellipsis-h icon-dark"></span>
+                                                    </span>
+                            <span class="sr-only">Toggle Dropdown</span>
+                        </button>
+
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item text-black btn-labeled" href="{{ path("admin_authors_show",{"id":author.id}) }}"><span class="btn-label"><i class="fa fa-eye"></i></span> Show</a></li>
+                            <li><a class="dropdown-item text-black" href="{{ path("admin_authors_edit",{"id":author.id}) }}"><span class="btn-label"><i class="fa fa-edit"></i></span> Edit</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item text-danger" href="#" onclick="dialogue({{ loop.index-1 }},'{{path('admin_authors_delete',{"id":author.id})}}')"><span class="btn-label"><i class="fa fa-trash"></i></span> Delete</a></li>
+                        </ul>
+                    </div>
+                </td>
+            </tr>
+{% endfor %}
+            </tbody>
+            <tfoot>
+            <tr>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Biography</th>
+                <th>Actions</th>
+            </tr>
+            </tfoot>
+        </table>
+    </div>
+{% endblock %}

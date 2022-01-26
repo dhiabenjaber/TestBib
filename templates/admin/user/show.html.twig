@@ -1,0 +1,15 @@
+{% extends "admin/form.base.html.twig" %}
+{% block title %}New user{% endblock %}
+{% block formTitle %}New user{% endblock %}
+{% block formContent %}
+    {{ include("admin/_form.html.twig") }}
+    <div class="btn-group">
+        <button type="button" class="btn btn-primary" onclick="location.href='{{ path("admin_users_index") }}';">Go Back</button> &nbsp;
+        <button type="button" class="btn btn-secondary" onclick="location.href='{{ path("admin_users_edit",{"id":user.id}) }}';">Edit</button> &nbsp;
+        <button type="button" class="btn btn-danger" onclick="dialogue({{ user.id }},'{{path('admin_users_delete',{"id":user.id})}}','{{ path("admin_editors_index") }}')">Delete</button> &nbsp;
+    </div>
+    {{ form_end(form) }}
+    <br>
+    <br>
+    <br>
+{% endblock %}
